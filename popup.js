@@ -1,18 +1,29 @@
 document.addEventListener('DOMContentLoaded', function () {
-  chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+  // Function to send messages to content script
+  function sendMessageToContentScript(action, data = {}) {
+    chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+      chrome.tabs.sendMessage(tabs[0].id, { action, ...data });
+    });
+  }
+
+  // Button click event listener to navigate to indeed.com
+  document.getElementById('openLinkButton').addEventListener('click', function () {
+    chrome.tabs.create({ url: 'https://www.indeed.com' });
+  });
+
+  // Button click event listener to trigger message sending for searching and applying jobs
+  document.getElementById('clickJobButton').addEventListener('click', function () {
     var keywords = 'web developer';
     var location = 'islamabad';
     var test = 'testing';
 
     // Send message to content script to search and apply jobs
-    chrome.tabs.sendMessage(tabs[0].id, {
-      action: 'searchAndApplyJobs',
-      keywords: keywords,
-      location: location,
-      test: test // Optionally send additional data
-    });
+    sendMessageToContentScript('searchAndApplyJobs', { keywords, location, test });
+  });
 
+  // Button click event listener to apply to jobs
+  document.getElementById('applyToJobs').addEventListener('click', function () {
     // Send message to content script to apply to jobs
-    chrome.tabs.sendMessage(tabs[0].id, { action: 'applyToJobs' });
+    sendMessageToContentScript('applyToJobs');
   });
 });

@@ -1,47 +1,45 @@
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     console.log('Message received:', request);
     if (request.action === 'searchAndApplyJobs') {
-        applyToJobs();
+      searchAndApplyJobs(request.keywords, request.location, request.fName, request.lName, request.phone_no);
     } else if (request.action === 'applyToJobs') {
-        alert("hello world");
-
+      // Perform the action to apply to jobs
+      alert("Applying to jobs...");
+      applyToJobs();
     }
-});
-
-async function searchAndApplyJobs(keywords, location, fName, lName, phone_no) {
+  });
+  
+  async function searchAndApplyJobs(keywords, location, fName, lName, phone_no) {
     // Replace these selectors with the actual ones from the Indeed website
     const searchKeywordInput = document.querySelector('#text-input-what');
     const locationInput = document.querySelector('#text-input-where');
-    
     const submitButton = document.querySelector('.yosegi-InlineWhatWhere-primaryButton');
-
+  
     try {
-        if (searchKeywordInput && locationInput && submitButton) {
-            // Set search values
-            searchKeywordInput.value = keywords;
-            locationInput.value = location;
-
-            searchKeywordInput.focus();
-            searchKeywordInput.blur();
-            locationInput.focus();
-            locationInput.blur();
-
-            // Click submit button to search for jobs
-            submitButton.click();
-
-            // Wait for the search results to load
-            alert("Searching for jobs...");
-            // observeDOM();
-
-
-        } else {
-            console.error('One or more elements not found.');
-        }
+      if (searchKeywordInput && locationInput && submitButton) {
+        // Set search values
+        searchKeywordInput.value = keywords;
+        locationInput.value = location;
+  
+        searchKeywordInput.focus();
+        searchKeywordInput.blur();
+        locationInput.focus();
+        locationInput.blur();
+  
+        // Click submit button to search for jobs
+        submitButton.click();
+  
+        // Wait for the search results to load
+        alert("Searching for jobs...");
+        // observeDOM();
+      } else {
+        console.error('One or more elements not found.');
+      }
     } catch (error) {
-        console.error('An error occurred:', error);
+      console.error('An error occurred:', error);
     }
-}
-
+  }
+  
 function observeDOM() {
 
     const targetNode = document.querySelector('#mosaic-provider-jobcards');
